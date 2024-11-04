@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Calculation - Polynomial Model</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 800px; margin: auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        h1, h2 { text-align: center; color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #3498db; color: white; }
+        button { padding: 10px 15px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .steps { margin-top: 20px; }
+        .step { background-color: #ecf0f1; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matrix Calculation for Polynomial Model</h1>
+        
+        <form method="POST">
+            <h2>Enter Dataset Values (x, y)</h2>
+            <table>
+                <tr>
+                    <th>x</th>
+                    <th>y</th>
+                </tr>
+                {% for i in range(3) %}
+                <tr>
+                    <td><input type="number" name="x_{{ i }}" step="any" required></td>
+                    <td><input type="number" name="y_{{ i }}" step="any" required></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if steps %}
+        <h2>Generated Matrix (X)</h2>
+        <div class="step">
+            {% for detail in steps["dettagli_X"] %}
+                <p>{{ detail }}</p>
+            {% endfor %}
+        </div>
+
+        <h2>Calculation Results</h2>
+
+        <div class="steps">
+            <div class="step">
+                <h3>1. Transpose of X (Xᵀ)</h3>
+                <pre>{{ steps["X_T"] }}</pre>
+            </div>
+
+            <div class="step">
+                <h3>2. Product of Xᵀ and X (Xᵀ * X)</h3>
+                <pre>{{ steps["X_T_X"] }}</pre>
+            </div>
+
+            <div class="step">
+                <h3>3. Determinant of Xᵀ * X</h3>
+                <pre>Determinant: {{ steps["det_X_T_X"] }}</pre>
+                <div class="detailed-calculation">
+                    <h4>Determinant Calculation Details:</h4>
+                    {% for detail in steps["dettagli_determinante"] %}
+                        <p>{{ detail }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>4. Cofactor Matrix of Xᵀ * X</h3>
+                <pre>{{ steps["cofactors"] }}</pre>
+                <h4>Cofactor Details:</h4>
+                {% for detail in steps["dettagli_cofattori"] %}
+                    <p>{{ detail }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="step">
+                <h3>5. Adjoint Matrix (transpose of cofactors)</h3>
+                <pre>{{ steps["adjoint"] }}</pre>
+            </div>
+
+            <div class="step">
+                <h3>6. Inverse of Xᵀ * X</h3>
+                <pre>{{ steps["inverse_X_T_X"] }}</pre>
+                <h4>Inverse Calculation Details:</h4>
+                {% for detail in steps["dettagli_inversa"] %}
+                    <p>{{ detail }}</p>
+                {% endfor %}
+            </div>
+            
+            <div class="step">
+                <h3>7. Product of Xᵀ and Y (Xᵀ * Y)</h3>
+                <pre>{{ steps["X_T_Y"] }}</pre>
+                <h4>Product Details:</h4>
+                {% for detail in steps["dettagli_X_T_Y"] %}
+                    <p>{{ detail }}</p>
+                {% endfor %}
+            </div>
+            
+
+            <div class="step">
+                <h3>8. Detailed Calculation of Each Element of Θ</h3>
+                {% if steps["dettagli_theta"] %}
+                    {% for detail in steps["dettagli_theta"] %}
+                        <p>{{ detail }}</p>
+                    {% endfor %}
+                {% else %}
+                    <p>Calculation of Θ is not available (inverse does not exist).</p>
+                {% endif %}
+                <h4>Result Θ:</h4>
+                <pre>{{ steps["theta"] }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
